@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+	<Button
+     android:id="@+id/action"
+     android:text="@+id/actiontext"
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:layout_alignParentBottom="true"	/>
+
+
+	<TextView android:id="@+id/textView0" 
+          android:layout_width="fill_parent" 
+          android:layout_height="wrap_content"   
+          android:textSize="18dip" 
+          android:gravity="start"
+	/>
+          
+	
+	 <TableLayout
+	 android:id="@+id/tableLayout"
+	 android:layout_width="fill_parent"
+	 android:layout_height="wrap_content"
+	 android:layout_below="@id/textView0"
+	 android:saveEnabled="false" />
+        
+               
+</RelativeLayout>
+
+

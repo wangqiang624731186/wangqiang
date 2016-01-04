@@ -1,0 +1,14 @@
+# File: Example
+LOCAL_PATH:= $(call my-dir)
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= \
+	java_socket_server.c
+LOCAL_C_INCLUDES := $(JNI_H_INCLUDE)
+LOCAL_SHARED_LIBRARIES := \
+	libc
+LOCAL_MODULE_TAGS := optional
+LOCAL_PRELINK_MODULE := false
+LOCAL_MODULE := java_socket_server
+
+include $(BUILD_EXECUTABLE)
+
