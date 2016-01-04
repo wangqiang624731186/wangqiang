@@ -1,0 +1,51 @@
+Fixed screen info:
+	id: inteldrmfb
+	smem_start: 0xe0366000
+	smem_len: 5185536
+	type: 0
+	type_aux: 0
+	visual: 2
+	xpanstep: 1
+	ypanstep: 1
+	ywrapstep: 0
+	line_length: 5760
+	mmio_start: 0x0
+	mmio_len: 0
+	accel: 0
+
+Variable screen info:
+	xres: 1440
+	yres: 900
+	xres_virtual: 1440
+	yres_virtual: 900
+	yoffset: 0
+	xoffset: 0
+	bits_per_pixel: 32
+	grayscale: 0
+	red: offset: 16, length:  8, msb_right:  0
+	green: offset:  8, length:  8, msb_right:  0
+	blue: offset:  0, length:  8, msb_right:  0
+	transp: offset:  0, length:  0, msb_right:  0
+	nonstd: 0
+	activate: 0
+	height: -1
+	width: -1
+	accel_flags: 0x1
+	pixclock: 0
+	left_margin: 0
+	right_margin: 0
+	upper_margin: 0
+	lower_margin: 0
+	hsync_len: 0
+	vsync_len: 0
+	sync: 0
+	vmode: 0
+
+Frame Buffer Performance test...
+ Average: 23034 usecs
+ Bandwidth: 214.696 MByte/Sec
+ Max. FPS: 43.414 fps
+
+Will draw 3 rectangles on the screen,
+they should be colored red, green and blue (in that order).
+ Done.
