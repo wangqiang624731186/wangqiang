@@ -1,0 +1,221 @@
+The I2C bus (or Inter-Integrated Circuit, referred to as I-squared-C, I-two-C, or IIC) is a multimaster serial single-ended computer bus invented by Philips.
+For more information about I2C please refer to this link: http://en.wikipedia.org/wiki/I2C
+
+The I2Cdev works only in master mode.
+There is a way of using the I2C kernel driver to work as a device in the userspace. It's called I2Cdev.
+
+Contents
+
+    1 Configuring your kernel
+    2 More information
+    3 Configuring your FEX
+    4 Using the I2Cdev
+        4.1 Using the I2Cdev with i2c-tools
+        4.2 Using an I2Cdev C example library
+
+Configuring your kernel
+
+For using it you will have to enable this options in your defconfig or manually in your kernel:
+
+CONFIG_I2C=y
+CONFIG_I2C_CHARDEV=y
+
+More information
+
+For more information about using I2Cdev in the userspace please refer to (Documentation/i2c/): http://lxr.free-electrons.com/source/Documentation/i2c/
+
+You will find there:
+dev-interface (contains the documentantion about the i2cdev)
+
+Configuring your FEX
+
+In the sunxi Fex and in the kernel drivers the I2C buses will be refered as TWI (Two-Wire-Interface that is a compatible designation to the I2C). It is important to configure your .fex file to be able to do so:
+(be aware that there could be othere ICs using I2C, for instance the AXP ICs genenrally used by the allwinner ICs.)
+
+[twi0_para]
+twi0_used = 1
+twi0_scl = port:PB00<2><default><default><default>
+twi0_sda = port:PB01<2><default><default><default>
+
+[twi1_para]
+twi1_used = 1
+twi1_scl = port:PB18<2><default><default><default>
+twi1_sda = port:PB19<2><default><default><default>
+
+[twi2_para]
+twi2_used = 1
+twi2_scl = port:PB20<2><default><default><default>
+twi2_sda = port:PB21<2><default><default><default>
+
+For more information about editing the fex file: http://linux-sunxi.org/Fex_Guide
+Using the I2Cdev
+
+Once you will have this set you can boot your sunxi device and you will have in your dev in /dev/i2cX
+
+Using the I2Cdev with i2c-tools
+
+There is a package called i2c-tools that have some nice debug/comunication apps for comunicating using I2Cdev.
+If you are using a Debian like filesystem you can install it using "apt-get install i2c-tools".
+i2c-tools has the following apps:
+
+i2cdetect (used to detect slaves address in the bus)
+i2cdump (used get a range of values)
+i2cget (used to get a value)
+i2cset (used to set a value)
+
+Please refer to each app -h option to see its usage.
+Using an I2Cdev C example library
+
+I've made a user friendlier library (C functions) to comunicate using I2Cdev:
+(Note, this library supose the read and write address to be 2 bytes) You may need to install the libi2c-dev package to make it work as it requires an adittionall .h. ("apt-get install libi2c-dev")
+
+/*
+A user-space program to get data from an I2C device.
+				Gustavo Zamboni
+*/
+#include <errno.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+char buf[10];
+extern int com_serial;
+extern int failcount;
+
+//////////
+// Init I2Cdevice
+//////////
+int i2c_init(char filename[40], int addr)
+	{
+    	int file;
+
+    	if ((file = open(filename,O_RDWR)) < 0)
+		{
+        	printf("Failed to open the bus.");
+        	/* ERROR HANDLING; you can check errno to see what went wrong */
+		com_serial=0;
+        	exit(1);
+    		}
+
+    if (ioctl(file,I2C_SLAVE,addr) < 0)
+		{
+        	printf("Failed to acquire bus access and/or talk to slave.\n");
+        	/* ERROR HANDLING; you can check errno to see what went wrong */
+		com_serial=0;
+        	exit(1);
+    		}
+	return file;
+	}
+
+
+//////////
+// Set pointer address
+//////////
+void i2c_set_pointer(int address,int value,int file)
+	{
+	/*
+	//printf("end: 0x%x%x\n", address,value);
+ 	if (i2c_smbus_write_byte_data(file, address, value)<0)
+		{
+		fprintf(stderr, "Warning - write failed\n");
+		}
+	*/
+	char buf[10];
+	buf[0]=address;
+	buf[1]=value;
+
+ 	if (write(file, buf, 2) != 2)
+		{
+		fprintf(stderr, "Error setting pointer\n");
+		com_serial=0;
+		failcount++;
+		}
+	else
+		{
+		//printf("w_0x%0*x\n", 2, buf[0]);
+		//printf("w_0x%0*x\n", 2, buf[1]);
+		com_serial=1;
+		failcount=0;
+  		}
+
+	}
+
+//////////
+// Read n bytes
+//////////
+
+char * i2c_read(int add1, int add2, int nbytes,int file)
+	{
+	int n;
+
+	i2c_set_pointer(add1,add2,file);
+
+ 	if (read(file, buf, nbytes) != nbytes)
+		{
+		fprintf(stderr, "Error reading %i bytes\n",nbytes);
+		com_serial=0;
+		failcount++;
+		}
+	else
+		{
+		for (n=0;n<nbytes;n++)
+			{
+			//printf("r_0x%0*x\n", 2, buf[n]);
+			}
+		com_serial=1;
+		failcount=0;
+		return buf;
+  		}
+	}
+
+//////////
+// Write n bytes
+//////////
+void i2c_write(int add1,int add2,int nbytes,char value[10],int file)
+	{
+	int n;
+	unsigned char buf[10];
+	buf[0] = add1;
+	buf[1] = add2;
+	if (nbytes>=1) buf[2] = value[0];
+	if (nbytes>=2) buf[3] = value[1];
+	if (nbytes>=3) buf[4] = value[2];
+	if (nbytes>=4) buf[5] = value[3];
+
+ 	if (write(file, buf, nbytes) != nbytes)
+		{
+		fprintf(stderr, "Error writing %i bytes\n",nbytes);
+		com_serial=0;
+		failcount++;
+		}
+	else
+		{
+		for (n=0;n<(nbytes+2);n++)
+			{
+			//printf("w_0x%0*x\n", 2, buf[n]);
+			}
+		com_serial=1;
+		failcount=0;
+  		}
+	}
+
+Usage example:
+
+char *buffer;
+char buf[10];
+
+file=i2c_init("/dev/i2c-1",0x38); //dev,slavei2caddr
+
+buf[0] = 0x41;
+buf[1] = 0xFF;
+i2c_write(0xE6,0x0E,2,buf,file); //this will write value 0x41FF to the address 0xE60E
+
+buffer=(char *)i2c_read(0xE6,0x0E,4,file); //reading a 4 bytes value at the address 0xE60E
+
+close(file);
