@@ -30,7 +30,7 @@ char HexStrToChar(char* str)
 
     for(i=0;i<len;i++)
     {
-        if(str[i] >= '0' && str[i] <= '0')
+        if(str[i] >= '0' && str[i] <= '9')
         {
            var = str[i] -48;
         }
