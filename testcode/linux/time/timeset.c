@@ -17,6 +17,7 @@ SetSystemTime(pt);
 **************************************************/
 int main(char *dt)
 {
+    /*
 struct rtc_time tm;
 struct tm _tm;
 struct timeval tv;
@@ -45,19 +46,19 @@ if(settimeofday (&tv, (struct timezone *) 0) < 0)
 printf("Set system datatime error!\n");
 return -1;
 }
-
+*/
 
     time_t now;
 
     struct tm *tm_now;
 
- 
+
 
     time(&now);
 
     tm_now = localtime(&now);
 
- 
+
 
     printf("now datetime: %d-%d-%d %d:%d:%d\n", tm_now->tm_year, tm_now->tm_mon, tm_now->tm_mday, tm_now->tm_hour, tm_now->tm_min, tm_now->tm_sec);
 //system("hwclock  -w");  //写到硬时钟
