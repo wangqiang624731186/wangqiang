@@ -1,0 +1,4 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_1='/home/wangqiang/Desktop'
+let g:netrw_dirhist_2='/home/wangqiang/work/svn/InstrumentCluster/03.SourceCode/OS/3.14.28/ver_0.0.1/kernel/drivers/media/platform/mxc/capture'

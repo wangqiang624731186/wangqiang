@@ -72,19 +72,20 @@ func SetTitle()
 		call setline(1,"\#########################################################################") 
 		call append(line("."), "\# File Name: ".expand("%")) 
 		call append(line(".")+1, "\# Author: wangqiang") 
-		call append(line(".")+2, "\# mail: wqa@ample.net.cn") 
+		call append(line(".")+2, "\# mail: 624731186@qq.com") 
 		call append(line(".")+3, "\# Created Time: ".strftime("%c")) 
 		call append(line(".")+4, "\#########################################################################") 
 		call append(line(".")+5, "\#!/bin/sh") 
 		call append(line(".")+6, "") 
 	else 
-		call setline(1, "/*************************************************************************") 
-		call append(line("."), "	> File Name: ".expand("%")) 
-		call append(line(".")+1, "	> Author: wangqiang") 
-		call append(line(".")+2, "	> Mail: wqa@ample.net.cn ") 
-		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
-		call append(line(".")+4, " ************************************************************************/") 
-		call append(line(".")+5, "")
+		call setline(1, "\/*******************************************************************************") 
+		call append(line("."), "    \\file          ".expand("%")) 
+		call append(line(".")+1, "    \\author        wangqiang") 
+		call append(line(".")+2, "    \\mail          wangqiang@auto-link.com") 
+		call append(line(".")+3, "    \\version       0.1") 
+        call append(line(".")+4, "    \\date          ".strftime("20%y-%m-%d \%H:%M")) 
+		call append(line(".")+5, "*******************************************************************************/") 
+		call append(line(".")+6, "")
 	endif
 	if &filetype == 'cpp'
 		call append(line(".")+6, "#include<iostream>")
@@ -92,9 +93,20 @@ func SetTitle()
 		call append(line(".")+8, "")
 	endif
 	if &filetype == 'c'
-		call append(line(".")+6, "#include<stdio.h>")
-		call append(line(".")+6, "#include<stdlib.h>")
-		call append(line(".")+7, "")
+		call append(line(".")+7, "\/*******************************************************************************") 
+		call append(line(".")+8, "    Include Files")
+		call append(line(".")+9, "*******************************************************************************/") 
+		call append(line(".")+10, "#include<stdio.h>")
+		call append(line(".")+11, "#include<stdlib.h>")
+		call append(line(".")+12, "")
+		call append(line(".")+13, "\/*******************************************************************************") 
+		call append(line(".")+14, "    Type Definition")
+		call append(line(".")+15, "*******************************************************************************/") 
+		call append(line(".")+16, "")
+		call append(line(".")+17, "\/*******************************************************************************") 
+		call append(line(".")+18, "    Function  Definition")
+		call append(line(".")+19, "*******************************************************************************/") 
+		call append(line(".")+20, "")
 	endif
 	"	if &filetype == 'java'
 	"		call append(line(".")+6,"public class ".expand("%"))
@@ -318,11 +330,14 @@ set cscopetag
 set nocsverb                                            
 ""cs add /home/wangqiang/work/svn/InstrumentCluster/03.SourceCode/OS/3.14.28/ver_0.0.1/kernel/cscope/cscope.out /home/wangqiang/work/svn/InstrumentCluster/03.SourceCode/OS/3.14.28/ver_0.0.1/kernel
 ""cs add /home/wangqiang/work/wayland/cscope/cscope.out /home/wangqiang/work/wayland
-cs add /home/wangqiang/work/github/zhirui-3.14.28/kernel/cscope/cscope.out /home/wangqiang/work/github/zhirui-3.14.28/kernel
+""cs add /home/wangqiang/work/github/zhirui-3.14.28/kernel/cscope/cscope.out /home/wangqiang/work/github/zhirui-3.14.28/kernel
+cs add /home/wangqiang/neusoft/source/cscope/cscope.out /home/wangqiang/neusoft/source
 ""cs add /home/wangqiang/work/linux/taflus/1wk/hmi/cscope/cscope.out /home/wangqiang/work/linux/taflus/1wk/hmi
 set csverb                                              
 ""set tags:./tags,tags,/home/wangqiang/work/svn/InstrumentCluster/03.SourceCode/OS/3.14.28/ver_0.0.1/kernel/cscope/tags
-set tags:./tags,tags,/home/wangqiang/work/github/zhirui-3.14.28/kernel/cscope/tags
+""set tags:./tags,tags,/home/wangqiang/work/github/zhirui-3.14.28/kernel/cscope/tags
+""set tags:./tags,tags,/home/wangqiang/work/ample/hmi/Hmi/cscope/tags
+set tags:./tags,tags,/home/wangqiang/neusoft/source/cscope/tags
 ""set tags:./tags,tags,/home/wangqiang/work/wayland/cscope/tags
 ""set tags:./tags,tags,/home/wangqiang/work/linux/taflus/1wk/hmi/cscope/tags
 
